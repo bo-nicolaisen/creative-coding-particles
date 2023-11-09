@@ -1,8 +1,8 @@
 * {
   margin: 0;
+  background-color: rgb(11, 60, 82);
 }
 
-#myCanvas {
-  color: black;
-  background-color: black;
+.canvas-container {
+   /* background-color: black; */ */
 }
