@@ -77,5 +77,13 @@ class Particle {
 }
 
 const myController = new Controller(myCanvas, ctx);
-myController.handleParticle();
 
+
+function animate() {
+
+    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    myController.handleParticle();
+    requestAnimationFrame(animate);
+}
+
+animate(); 
