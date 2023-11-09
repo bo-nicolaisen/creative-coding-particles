@@ -37,6 +37,7 @@ class Controller {
 
     handleParticle() {
         this.particles.forEach(particle => {
+            particle.update();
             particle.draw(this.ctx);
         });
     }
@@ -50,13 +51,23 @@ class Controller {
 class Particle {
     constructor (controller) {
         this.controller = controller;
-        this.x = Math.random() * this.controller.width;
-        this.y = Math.random() * this.controller.height;
-        this.radius = 10;
+        this.radius = Math.random() * 10;
+
+        this.x = this.radius + Math.random() * (this.controller.width - this.radius * 2);
+        this.y = this.radius + Math.random() * (this.controller.height - this.radius * 2);
+
+
+
+    }
+
+    update() {
+        this.x++;
 
     }
 
     draw(ctx) {
+
+        ctx.fillStyle = `hsl(${300},100%,50%)`
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -67,3 +78,4 @@ class Particle {
 
 const myController = new Controller(myCanvas, ctx);
 myController.handleParticle();
+
