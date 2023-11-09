@@ -1,25 +1,69 @@
 
 const myCanvas = document.getElementById('myCanvas');
-const ctx = myCanvas.getContext('2d');
 
 myCanvas.width = window.innerWidth;
 myCanvas.height = window.innerHeight;
 
-console.log(ctx);
 
-class controller {
+const ctx = myCanvas.getContext('2d');
+ctx.fillStyle = 'white';
 
-    constructor (options) {
+//console.log(ctx);
 
+
+
+
+class Controller {
+
+    constructor (canvas, ctx) {
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.width = canvas.width;
+        this.height = canvas.height;
+        this.particles = [];
+        this.numParticles = 20;
+        this.createParticles();
+
+    }
+
+    createParticles() {
+
+        for (let index = 0; index < this.numParticles; index++) {
+            this.particles.push(new Particle(this));
+
+        }
+
+    }
+
+    handleParticle() {
+        this.particles.forEach(particle => {
+            particle.draw(this.ctx);
+        });
     }
 
 
 }
 
-class particle {
-    constructor (options) {
 
+
+
+class Particle {
+    constructor (controller) {
+        this.controller = controller;
+        this.x = Math.random() * this.controller.width;
+        this.y = Math.random() * this.controller.height;
+        this.radius = 10;
+
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
     }
 
 
 }
+
+const myController = new Controller(myCanvas, ctx);
+myController.handleParticle();
