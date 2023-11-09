@@ -1,17 +1,25 @@
-import { ParticleController, particleCloud } from './particles.js';
+import { ParticleController, FastParticles, particleCloud, HardParticles } from './particles.js';
 
 
 const myApp = document.getElementById('app');
 
-const myCanvas = document.createElement('canvas');
+/* const myCanvas = document.createElement('canvas');
 myCanvas.width = 200;// window.innerWidth;
 myCanvas.height = 400; //window.innerHeight;
 myCanvas.classList.add('canvas-container');
 myApp.appendChild(myCanvas);
 
-const ctx = myCanvas.getContext('2d');
 
+const myCanvasTwo = document.createElement('canvas');
+myCanvasTwo.width = 200;// window.innerWidth;
+myCanvasTwo.height = 400; //window.innerHeight;
+myCanvasTwo.classList.add('canvas-container');
+myApp.appendChild(myCanvasTwo); */
+
+
+const myCloud = particleCloud(myApp, 10);
 let baseColorHue = 10;
-const myCloud = particleCloud(myCanvas, baseColorHue);
+const myCloudTwo = HardParticles(myApp, 200);
 
-//const myController = new ParticleController(myCanvas, ctx, "soft", 300, 100, 0.2, 2, 40);
+const p3 = FastParticles(myApp, 100);
+

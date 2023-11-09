@@ -1,9 +1,47 @@
 
-export function particleCloud(canvas, baseHue) {
+export function particleCloud(container, baseHue) {
 
-    const ctx = canvas.getContext('2d');
 
-    const myController = new ParticleController(canvas, ctx, "soft", baseHue, 10, 0.2, 2, canvas.width * 0.4);
+    const myCanvas = document.createElement('canvas');
+    myCanvas.width = 200;// window.innerWidth;
+    myCanvas.height = 400; //window.innerHeight;
+    myCanvas.classList.add('canvas-container');
+    container.appendChild(myCanvas);
+
+    const ctx = myCanvas.getContext('2d');
+
+    const myController = new ParticleController(myCanvas, ctx, "soft", baseHue, 30, 0.1, 2, myCanvas.width * 0.3);
+
+}
+
+
+export function HardParticles(container, baseHue) {
+
+    const myCanvas = document.createElement('canvas');
+    myCanvas.width = 200;// window.innerWidth;
+    myCanvas.height = 400; //window.innerHeight;
+    myCanvas.classList.add('canvas-container');
+    container.appendChild(myCanvas);
+
+    const ctx = myCanvas.getContext('2d');
+
+
+    const myController = new ParticleController(myCanvas, ctx, "hard", baseHue, 10, 0.3, 2, myCanvas.width * 0.3);
+
+}
+
+export function FastParticles(container, baseHue) {
+
+    const myCanvas = document.createElement('canvas');
+    myCanvas.width = 200;// window.innerWidth;
+    myCanvas.height = 400; //window.innerHeight;
+    myCanvas.classList.add('canvas-container');
+    container.appendChild(myCanvas);
+
+    const ctx = myCanvas.getContext('2d');
+
+
+    const myController = new ParticleController(myCanvas, ctx, "fast", baseHue, 300, 2, 1, 2);
 
 }
 
@@ -39,6 +77,9 @@ export class ParticleController {
                     break;
                 case "hard":
                     myParticle = new Particle(this, this.particleSpeed, this.minSize, this.maxSize, this.baseHue)
+                    break;
+                case "fast":
+                    myParticle = new ColorParticle(this, this.particleSpeed, this.minSize, this.maxSize, this.baseHue)
                     break;
 
                 default:
@@ -169,5 +210,52 @@ class SoftParticle {
 
 
 }
+
+
+class ColorParticle {
+    constructor (controller, speed, minSize, maxSize, baseHue) {
+        this.controller = controller;
+        this.radius = (Math.random() * maxSize) + minSize;
+
+        this.x = this.radius + Math.random() * (this.controller.width - this.radius * 2);
+        this.y = this.radius + Math.random() * (this.controller.height - this.radius * 2);
+
+        this.maxVelo = speed;
+        this.vX = Math.random() * this.maxVelo + this.maxVelo * 0.5;
+        this.vY = Math.random() * this.maxVelo + this.maxVelo * 0.5;
+        this.hue = baseHue; //  Math.random() * 360;
+
+    }
+
+    update() {
+
+
+        this.x += this.vX;
+        this.y += this.vY;
+
+        if (this.x > this.controller.width - this.radius || this.x < this.radius) {
+            this.vX *= -1;
+
+        }
+        if (this.y > this.controller.height - this.radius || this.y < this.radius) {
+            this.vY *= -1;
+
+        }
+
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.fillStyle = `hsl(${this.hue},100%,50%,1)`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    }
+
+
+}
+
 
 
