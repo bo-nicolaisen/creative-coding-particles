@@ -196,9 +196,12 @@ class SoftParticle {
     draw(ctx) {
 
         var gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+
+        // make gradient
         gradient.addColorStop(0, `hsl(${this.hue},100%,50%,1)`);
 
         gradient.addColorStop(1, `hsl(${this.hue},100%,50%,0)`);
+
         ctx.save();
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -207,7 +210,6 @@ class SoftParticle {
         ctx.closePath();
         ctx.restore();
     }
-
 
 }
 
