@@ -3,26 +3,32 @@ let cols; let rows; let size; let speed;
 let myParticles = [];
 
 let animate = false;
+let trace = 1;
+
+let myHeight = window.innerHeight;
+let myWidth = window.innerWidth;
 
 
 function preload() {
-    img = loadImage("assets/img/ml.jpg");
+    img = loadImage("assets/img/darkangel.png");
 
 }
 
 function setup() {
-    createCanvas(700, 800);
-    img.resize(700, 0);
+
+    createCanvas(myWidth, myHeight);
+    img.resize(0, myHeight);
     //grid
-    size = 10;
-    speed = 0.4;
+
+    size = myWidth * 0.008;
+    speed = map(Math.random(), 0, 1, 0.02, 1);
     cols = width / size;
     rows = height / size;
 
 
 
     background(0);
-
+    //image(img, 0, 0);
     //image(img, 0, 0)
     //img.resize(400, 0);
 
@@ -48,7 +54,10 @@ function setup() {
 function draw() {
 
     if (animate) {
-        //background(0);
+        if (!trace) {
+            background(0);
+        }
+
         myParticles.forEach(particle => {
             particle.updateParticle();
             // particle.drawParticle();
@@ -58,10 +67,13 @@ function draw() {
 }
 
 function mouseClicked() {
+
     if (animate) {
         animate = false;
 
+
         background(0);
+        //image(img, 0, 0);
 
         myParticles.forEach(particle => {
             particle.resetParticle();
@@ -79,6 +91,7 @@ class Particle {
     constructor (x, y, mySize, velocity, myColor) {
 
         this.pixelColor = myColor;
+        this.alpha = 255;
         this.x = x;
         this.y = y;
 
@@ -87,21 +100,29 @@ class Particle {
         this.size = mySize;
         this.rad = mySize;
         this.v = velocity;
-        this.decay = map(Math.random(), 0, 1, 0.2, 0.4);
-        this.vX = Math.random() * velocity - (velocity / 2);
+        this.decay = map(Math.random(), 0, 1, 0.02, 0.4);
+        this.vX = (Math.random() * velocity - (velocity / 2));// * 2;
         this.vY = Math.random() * velocity - (velocity / 2);
 
 
     }
 
     updateParticle() {
+
+        if (Math.random() > 0.8) {
+            this.vX = (Math.random() * this.v - (this.v / 2));// * 3;
+            this.vY = Math.random() * this.v - (this.v / 2);
+        }
+
+
         this.x += this.vX;
         this.y += this.vY;
 
         this.rad -= this.decay;
-        if (this.rad < 0) {
-            this.rad = 0;
-        } else {
+        // this.alpha -= map(this.decay, 0.02, 0.4, 0, 255);
+
+
+        if (this.rad > 0) {
             this.drawParticle();
         }
 
@@ -111,9 +132,9 @@ class Particle {
     resetParticle() {
         this.x = this.xOrigin;
         this.y = this.yOrigin;
-
+        this.alpha = 255;
         this.rad = this.size;
-        console.log(this.rad, this.size);
+
         this.drawParticle();
     }
 
@@ -122,7 +143,7 @@ class Particle {
         //point(this.x, this.y);
 
         noStroke();
-        fill(this.pixelColor[0], this.pixelColor[1], this.pixelColor[2]);
+        fill(this.pixelColor[0], this.pixelColor[1], this.pixelColor[2], this.alpha);
 
         circle(this.x * this.size, this.y * this.size, this.rad);
 
