@@ -2,15 +2,17 @@ let img;
 let cols; let rows; let size; let speed;
 let myParticles = [];
 
-let animate = false;
+let animate = true;
 let trace = 1;
 
 let myHeight = window.innerHeight;
 let myWidth = window.innerWidth;
 
+document.getElementsByClassName
+
 
 function preload() {
-    img = loadImage("assets/img/darkangel.png");
+    img = loadImage("assets/img/ml.jpg");
 
 }
 
@@ -20,7 +22,7 @@ function setup() {
     img.resize(0, myHeight);
     //grid
 
-    size = myWidth * 0.008;
+    size = myWidth * 0.005;
     speed = map(Math.random(), 0, 1, 0.02, 1);
     cols = width / size;
     rows = height / size;
@@ -66,7 +68,25 @@ function draw() {
 
 }
 
-function mouseClicked() {
+
+function mouseDragged() {
+
+    let MousePos = createVector(mouseX, mouseY);
+
+    myParticles.forEach(particle => {
+
+        particle.triggerDist(MousePos);
+
+    });
+
+}
+
+
+
+
+
+
+/* function mouseClicked() {
 
     if (animate) {
         animate = false;
@@ -82,7 +102,7 @@ function mouseClicked() {
     } else {
         animate = true
     }
-}
+} */
 
 
 
@@ -103,28 +123,48 @@ class Particle {
         this.decay = map(Math.random(), 0, 1, 0.02, 0.4);
         this.vX = (Math.random() * velocity - (velocity / 2));// * 2;
         this.vY = Math.random() * velocity - (velocity / 2);
+        this.activated = 0;
+
+
+    }
+
+    triggerDist(myOrigin) {
+
+        let myPos = createVector(this.x * this.size, this.y * this.size);
+
+        let myDelta = myPos.dist(myOrigin);
+
+        if (myDelta < 10) {
+
+            this.activated = 1;
+
+        }
+
 
 
     }
 
     updateParticle() {
+        if (this.activated) {
 
-        if (Math.random() > 0.8) {
-            this.vX = (Math.random() * this.v - (this.v / 2));// * 3;
-            this.vY = Math.random() * this.v - (this.v / 2);
+            if (Math.random() > 0.8) {
+                this.vX = (Math.random() * this.v - (this.v / 2));// * 3;
+                this.vY = Math.random() * this.v - (this.v / 2);
+            }
+
+
+            this.x += this.vX;
+            this.y += this.vY;
+
+            this.rad -= this.decay;
+            // this.alpha -= map(this.decay, 0.02, 0.4, 0, 255);
+
+
+            if (this.rad > 0) {
+                this.drawParticle();
+            }
         }
 
-
-        this.x += this.vX;
-        this.y += this.vY;
-
-        this.rad -= this.decay;
-        // this.alpha -= map(this.decay, 0.02, 0.4, 0, 255);
-
-
-        if (this.rad > 0) {
-            this.drawParticle();
-        }
 
 
     }
