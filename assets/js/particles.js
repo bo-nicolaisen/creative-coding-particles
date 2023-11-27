@@ -65,6 +65,7 @@ export class ParticleController {
         this.baseHue = baseHue;
         this.createParticles();
         this.animate();
+
     }
 
     createParticles() {
@@ -144,6 +145,8 @@ class Particle {
             this.vY *= -1;
             this.hue += 10;
         }
+
+
 
     }
 
@@ -243,6 +246,7 @@ class ColorParticle {
             this.vY *= -1;
 
         }
+
 
     }
 
