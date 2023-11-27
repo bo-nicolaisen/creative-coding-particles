@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 
 <head>
@@ -7,13 +7,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Particles</title>
     <link rel="stylesheet" href="assets/css/site.css">
-    <script src="assets/js/particles.js" defer></script>
+    <script src="assets/js/clmtrackr.js"></script>
+    <script src="assets/js/face.js" defer></script>
 </head>
 
 <body>
 
-    <canvas id="myCanvas"></canvas>
+    <video id="videoCam"></video>
+    <br /><br />
+    <button id="startBtn" onclick="openCam()">Open Camera</button>
+
 
 </body>
 
-</html>
+</html> -->
+
+
+
+<body cz-shortcut-listen="true">
+    <!-- <script src="./js/libs/utils.js"></script> -->
+    <script src="assets/js/clmtrackr.js"></script>
+    <div id="content">
+        <h2>Example</h2>
+        <div id="container">
+            <video id="video" width="368" height="288" autoplay="" loop="" playsinline="">
+                <source src="./media/franck.mp4" type="video/mp4">
+                <source src="./media/franck.webm" type="video/webm">
+            </video>
+            <canvas id="canvas" width="368" height="288"></canvas>
+        </div>
+        <p>Printing coordinates of the first 10 points in facial features:</p>
+        <p id="positions">featurepoint 0 : [136.81,138.72]<br>featurepoint 1 : [137.72,160.94]<br>featurepoint 2 :
+            [142.62,181.49]<br>featurepoint 3 : [150.30,202.24]<br>featurepoint 4 : [161.92,219.06]<br>featurepoint 5 :
+            [176.91,231.37]<br>featurepoint 6 : [193.98,239.42]<br>featurepoint 7 : [213.25,240.08]<br>featurepoint 8 :
+            [232.15,233.73]<br>featurepoint 9 : [247.14,220.52]<br></p>
+        <script>
+            let videoInput;
+
+            openCam()
+            function openCam() {
+                let All_mediaDevices = navigator.mediaDevices
+                if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
+                    console.log("getUserMedia() not supported.");
+                    return;
+                }
+                All_mediaDevices.getUserMedia({
+                    audio: false,
+                    video: true
+                })
+                    .then(function (vidStream) {
+                        var videoInput = document.getElementById('videoCam');
+                        if ("srcObject" in video) {
+                            videoInput.srcObject = vidStream;
+                        } else {
+                            video.src = window.URL.createObjectURL(vidStream);
+                        }
+                        videoInput.onloadedmetadata = function (e) {
+                            videoInput.play();
+                            // startTracking(videoInput);
+                        };
+                    })
+                    .catch(function (e) {
+                        console.log(e.name + ": " + e.message);
+                    });
+            }
+
+
+
+
+            var ctracker = new clm.tracker();
+            ctracker.init();
+            ctracker.start(videoInput);
+
+            function positionLoop() {
+                requestAnimFrame(positionLoop);
+                var positions = ctracker.getCurrentPosition();
+                // do something with the positions ...
+                // print the positions
+                var positionString = "";
+                if (positions) {
+                    for (var p = 0; p < 10; p++) {
+                        positionString += "featurepoint " + p + " : [" + positions[p][0].toFixed(2) + "," + positions[p][1].toFixed(2) + "]<br/>";
+                    }
+                    document.getElementById('positions').innerHTML = positionString;
+                }
+            }
+            positionLoop();
+
+            var canvasInput = document.getElementById('canvas');
+            var cc = canvasInput.getContext('2d');
+            function drawLoop() {
+                requestAnimFrame(drawLoop);
+                cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+                ctracker.draw(canvasInput);
+            }
+            drawLoop();
+        </script>
+    </div>
+
+
+</body>
