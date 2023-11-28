@@ -12,7 +12,7 @@ document.getElementsByClassName
 
 
 function preload() {
-    img = loadImage("assets/img/ml.jpg");
+    img = loadImage("assets/img/dd.png");
 
 }
 
@@ -22,7 +22,7 @@ function setup() {
     img.resize(0, myHeight);
     //grid
 
-    size = myWidth * 0.005;
+    size = myWidth * 0.008;
     speed = map(Math.random(), 0, 1, 0.02, 1);
     cols = width / size;
     rows = height / size;
@@ -147,7 +147,7 @@ class Particle {
     updateParticle() {
         if (this.activated) {
 
-            if (Math.random() > 0.8) {
+            if (Math.random() > 0.9) {
                 this.vX = (Math.random() * this.v - (this.v / 2));// * 3;
                 this.vY = Math.random() * this.v - (this.v / 2);
             }
