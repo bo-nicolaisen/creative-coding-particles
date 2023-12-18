@@ -1,4 +1,33 @@
 
+class myRect {
+    constructor (ctx) {
+
+        this.ctx = ctx;
+
+        this.updateRect();
+    }
+
+    updateRect() {
+        this.x = Math.random() * 800;
+        this.y = Math.random() * 300;
+        this.width = Math.random() * 400;
+        this.height = Math.random() * 600;
+
+        this.drawRect();
+    }
+
+    drawRect() {
+        this.ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255},${Math.random()})`;
+
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+
+    }
+}
+
+
+
+
+
 const myCanvas = document.getElementById('myCanvas');
 
 myCanvas.width = window.innerWidth;
@@ -6,9 +35,40 @@ myCanvas.height = window.innerHeight;
 
 
 const ctx = myCanvas.getContext('2d');
-ctx.fillStyle = 'white';
 
-//console.log(ctx);
+console.log(ctx);
+
+
+
+
+let myArray = [];
+
+
+for (let i = 0; i < 100; i++) {
+    myArray.push(new myRect(ctx));
+}
+
+
+
+
+var myTimer = setInterval(change, 10);
+
+
+
+
+
+function change() {
+    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+    myArray.forEach(element => {
+        element.updateRect();
+    });
+
+
+}
+
+
+
 
 
 
@@ -42,10 +102,7 @@ class Controller {
         });
     }
 
-
 }
-
-
 
 
 class Particle {
@@ -76,6 +133,6 @@ class Particle {
 
 }
 
-const myController = new Controller(myCanvas, ctx);
-myController.handleParticle();
+/* const myController = new Controller(myCanvas, ctx);
+myController.handleParticle(); */
 
